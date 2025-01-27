@@ -32,11 +32,11 @@ public class BankAccount {
     }
 
     public void deposit(double amount) {
-        if (amount > 0) {
-            balance += amount;
-        } else {
+        if (amount <= 0) {
             throw new IllegalStateException("Amount should be greater than 0");
         }
+
+        balance += amount;
     }
 
     public void withdraw(double amount) {
