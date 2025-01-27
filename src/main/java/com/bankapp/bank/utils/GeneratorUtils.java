@@ -24,6 +24,7 @@ public class GeneratorUtils {
             }
             sum += digit;
         }
+
         int checksum = (10 - (sum % 10)) % 10;
         cardNumber.append(checksum);
 
