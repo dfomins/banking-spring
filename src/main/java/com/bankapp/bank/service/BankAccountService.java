@@ -1,6 +1,7 @@
 package com.bankapp.bank.service;
 
 import com.bankapp.bank.model.BankAccount;
+import com.bankapp.bank.model.OperationType;
 import com.bankapp.bank.repository.BankAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,10 +33,27 @@ public class BankAccountService {
         bankAccountRepository.save(bankAccount);
     }
 
-    public void depositToBankAccount(String accountNumber, double amount) {
+    public void changeBalance(OperationType operationType, String accountNumber, double amount) {
         bankAccountExists(accountNumber);
         BankAccount bankAccount = bankAccountRepository.findByAccountNumber(accountNumber);
-        bankAccount.deposit(amount);
+
+        if (amount <= 0) {
+            throw new IllegalStateException("Amount should be greater than 0");
+        }
+
+        switch (operationType) {
+            case DEPOSIT -> {
+                bankAccount.deposit(amount);
+            }
+
+            case WITHDRAW -> {
+                if (bankAccount.getBalance() < amount) {
+                    throw new IllegalStateException("Not enough money!");
+                }
+                bankAccount.withdraw(amount);
+            }
+        }
+
         bankAccountRepository.save(bankAccount);
     }
 

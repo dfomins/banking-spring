@@ -38,4 +38,12 @@ public class BankAccount {
             throw new IllegalStateException("Amount should be greater than 0");
         }
     }
+
+    public void withdraw(double amount) {
+        if (balance < amount) {
+            throw new IllegalStateException("Not enough money");
+        }
+
+        balance -= amount;
+    }
 }

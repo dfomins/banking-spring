@@ -3,6 +3,7 @@ package com.bankapp.bank.controller;
 import com.bankapp.bank.dto.BankAccountCreateDTO;
 import com.bankapp.bank.mapper.BankAccountMapper;
 import com.bankapp.bank.model.BankAccount;
+import com.bankapp.bank.model.OperationType;
 import com.bankapp.bank.service.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,9 +36,14 @@ public class BankAccountController {
         bankAccountService.createBankAccount(newBankAccount);
     }
 
-    @PostMapping("/add-balance")
+    @PostMapping("/deposit")
     public void depositToBankAccount(@RequestParam String accountNumber, @RequestParam double amount) {
-        bankAccountService.depositToBankAccount(accountNumber, amount);
+        bankAccountService.changeBalance(OperationType.DEPOSIT, accountNumber, amount);
+    }
+
+    @PostMapping("/withdrawal")
+    public void withdrawFromBankAccount(@RequestParam String accountNumber, @RequestParam double amount) {
+        bankAccountService.changeBalance(OperationType.WITHDRAW, accountNumber, amount);
     }
 
     @DeleteMapping(path = "{bankAccountNumber}")
