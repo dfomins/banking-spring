@@ -6,7 +6,6 @@ import com.bankapp.bank.repository.BankAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,12 +23,12 @@ public class BankAccountService {
         return bankAccountRepository.findAll();
     }
 
-    public void createBankAccount(BankAccount bankAccount) {
-//        Optional<BankAccount> bankAccountByNumber = bankAccountRepository.findBankAccountByNumber(bankAccount.getAccountNumber());
-//        if (bankAccountByNumber.isPresent()) {
-//            throw new IllegalStateException("Number already exists");
-//        }
+    public Optional<BankAccount> getBankAccount(String accountNumber) {
+        bankAccountExists(accountNumber);
+        return bankAccountRepository.findById(accountNumber);
+    }
 
+    public void createBankAccount(BankAccount bankAccount) {
         bankAccountRepository.save(bankAccount);
     }
 
@@ -55,6 +54,21 @@ public class BankAccountService {
         }
 
         bankAccountRepository.save(bankAccount);
+    }
+
+    public void transferToBankAccount(String fromAccountNumber, String toAccountNumber, double amount) {
+        bankAccountExists(fromAccountNumber);
+        bankAccountExists(toAccountNumber);
+
+        BankAccount fromBankAccount = bankAccountRepository.findByAccountNumber(fromAccountNumber);
+        BankAccount toBankAccount = bankAccountRepository.findByAccountNumber(toAccountNumber);
+
+        fromBankAccount.withdraw(amount);
+        toBankAccount.deposit(amount);
+
+        bankAccountRepository.saveAll(
+                List.of(fromBankAccount, toBankAccount)
+        );
     }
 
     public void deleteBankAccount(String accountNumber)

@@ -40,6 +40,10 @@ public class BankAccount {
     }
 
     public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalStateException("Amount should be greater than 0");
+        }
+
         if (balance < amount) {
             throw new IllegalStateException("Not enough money");
         }

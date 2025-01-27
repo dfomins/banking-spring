@@ -11,20 +11,20 @@ import java.util.List;
 @Configuration
 public class BankAccountConfig {
 
-    @Bean
-    CommandLineRunner commandLineRunner(BankAccountRepository bankAccountRepository) {
-        return args -> {
-
-            BankAccount ba1 = new BankAccount();
-            BankAccount ba2 = new BankAccount(
-                    120.11
-            );
-
-            bankAccountRepository.saveAll(
-                    List.of(ba1, ba2)
-            );
-
-        };
-    }
+//    @Bean
+//    CommandLineRunner commandLineRunner(BankAccountRepository bankAccountRepository) {
+//        return args -> {
+//
+//            BankAccount ba1 = new BankAccount();
+//            BankAccount ba2 = new BankAccount(
+//                    120.11
+//            );
+//
+//            bankAccountRepository.saveAll(
+//                    List.of(ba1, ba2)
+//            );
+//
+//        };
+//    }
 
 }

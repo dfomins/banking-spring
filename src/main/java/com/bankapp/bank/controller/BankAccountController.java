@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "bank_accounts")
@@ -30,24 +31,34 @@ public class BankAccountController {
         return bankAccountService.getBankAccounts();
     }
 
+    @GetMapping(path = "{accountNumber}")
+    public Optional<BankAccount> getBankAccount(@PathVariable("accountNumber") String accountNumber) {
+        return bankAccountService.getBankAccount(accountNumber);
+    }
+
     @PostMapping
     public void createBankAccount(@RequestBody BankAccountCreateDTO bankAccount) {
         BankAccount newBankAccount = bankAccountMapper.toEntity(bankAccount);
         bankAccountService.createBankAccount(newBankAccount);
     }
 
-    @PostMapping("/deposit")
+    @PutMapping("/deposit")
     public void depositToBankAccount(@RequestParam String accountNumber, @RequestParam double amount) {
         bankAccountService.changeBalance(OperationType.DEPOSIT, accountNumber, amount);
     }
 
-    @PostMapping("/withdrawal")
+    @PutMapping("/withdrawal")
     public void withdrawFromBankAccount(@RequestParam String accountNumber, @RequestParam double amount) {
         bankAccountService.changeBalance(OperationType.WITHDRAW, accountNumber, amount);
     }
 
-    @DeleteMapping(path = "{bankAccountNumber}")
-    public void deleteBankAccount(@PathVariable("bankAccountNumber") String accountNumber) {
+    @PutMapping("/transfer")
+    public void transferToBankAccount(@RequestParam String fromAccountNumber, @RequestParam String toAccountNumber, @RequestParam double amount) {
+        bankAccountService.transferToBankAccount(fromAccountNumber, toAccountNumber, amount);
+    }
+
+    @DeleteMapping(path = "{accountNumber}")
+    public void deleteBankAccount(@PathVariable("accountNumber") String accountNumber) {
         bankAccountService.deleteBankAccount(accountNumber);
     }
 
