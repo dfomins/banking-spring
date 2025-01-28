@@ -1,0 +1,40 @@
+package com.bankapp.bank.controller;
+
+import com.bankapp.bank.dto.ClientCreateDTO;
+import com.bankapp.bank.mapper.ClientMapper;
+import com.bankapp.bank.model.Client;
+import com.bankapp.bank.service.ClientService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(path = "client")
+public class ClientController {
+    private final ClientService clientService;
+
+    private final ClientMapper clientMapper;
+
+    @Autowired
+    public ClientController(ClientService clientService, ClientMapper clientMapper) {
+        this.clientService = clientService;
+        this.clientMapper = clientMapper;
+    }
+
+    @GetMapping
+    public List<Client> getClients() {
+        return clientService.getClients();
+    }
+
+    @PostMapping
+    public void createClient(@RequestBody ClientCreateDTO clientDTO) {
+        Client client = clientMapper.toEntity(clientDTO);
+        clientService.createClient(client);
+    }
+
+    @DeleteMapping(path = "{clientId}")
+    public void deleteBankAccount(@PathVariable("clientId") long clientId) {
+        clientService.deleteClient(clientId);
+    }
+}

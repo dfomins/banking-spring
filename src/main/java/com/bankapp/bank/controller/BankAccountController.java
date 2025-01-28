@@ -1,9 +1,12 @@
 package com.bankapp.bank.controller;
 
 import com.bankapp.bank.dto.BankAccountCreateDTO;
+import com.bankapp.bank.dto.BankAccountDTO;
 import com.bankapp.bank.mapper.BankAccountMapper;
 import com.bankapp.bank.model.BankAccount;
+import com.bankapp.bank.model.Client;
 import com.bankapp.bank.model.OperationType;
+import com.bankapp.bank.repository.ClientRepository;
 import com.bankapp.bank.service.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "bank_accounts")
+@RequestMapping(path = "bank_account")
 public class BankAccountController {
 
     private final BankAccountService bankAccountService;
@@ -27,7 +30,7 @@ public class BankAccountController {
     private BankAccountMapper bankAccountMapper;
 
     @GetMapping
-    public List<BankAccount> getBankAccounts() {
+    public List<BankAccountDTO> getBankAccounts() {
         return bankAccountService.getBankAccounts();
     }
 
@@ -38,8 +41,7 @@ public class BankAccountController {
 
     @PostMapping
     public void createBankAccount(@RequestBody BankAccountCreateDTO bankAccount) {
-        BankAccount newBankAccount = bankAccountMapper.toEntity(bankAccount);
-        bankAccountService.createBankAccount(newBankAccount);
+        bankAccountService.createBankAccount(bankAccount);
     }
 
     @PutMapping("/deposit")

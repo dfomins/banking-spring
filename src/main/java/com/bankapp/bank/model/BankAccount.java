@@ -10,6 +10,10 @@ public class BankAccount {
     private final String accountNumber;
     private double balance;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
     public BankAccount() {
         this.accountNumber = GeneratorUtils.generateCardNumber();
     }
@@ -29,6 +33,11 @@ public class BankAccount {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public String getClientFullName() { return client.getName() + " " + client.getSurname(); }
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public void deposit(double amount) {
