@@ -4,13 +4,16 @@ import com.bankapp.bank.dto.ClientCreateDTO;
 import com.bankapp.bank.mapper.ClientMapper;
 import com.bankapp.bank.model.Client;
 import com.bankapp.bank.service.ClientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "client")
+@Validated
 public class ClientController {
     private final ClientService clientService;
 
@@ -28,7 +31,7 @@ public class ClientController {
     }
 
     @PostMapping
-    public void createClient(@RequestBody ClientCreateDTO clientDTO) {
+    public void createClient(@Valid @RequestBody ClientCreateDTO clientDTO) {
         Client client = clientMapper.toEntity(clientDTO);
         clientService.createClient(client);
     }
