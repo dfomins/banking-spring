@@ -35,7 +35,7 @@ public class BankAccountController {
     }
 
     @GetMapping(path = "{accountNumber}")
-    public Optional<BankAccount> getBankAccount(@PathVariable("accountNumber") String accountNumber) {
+    public BankAccount getBankAccount(@PathVariable("accountNumber") String accountNumber) {
         return bankAccountService.getBankAccount(accountNumber);
     }
 

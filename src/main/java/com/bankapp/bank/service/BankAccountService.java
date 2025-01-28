@@ -38,9 +38,8 @@ public class BankAccountService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<BankAccount> getBankAccount(String accountNumber) {
-        bankAccountExists(accountNumber);
-        return bankAccountRepository.findById(accountNumber);
+    public BankAccount getBankAccount(String accountNumber) {
+        return bankAccountRepository.findById(accountNumber).orElseThrow(() -> new IllegalStateException("Bank account doesn't exists!"));
     }
 
     public void createBankAccount(BankAccountCreateDTO bankAccountDTO) {

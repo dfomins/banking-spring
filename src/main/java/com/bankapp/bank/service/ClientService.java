@@ -20,6 +20,10 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
+    public Client getClient(long clientId) {
+        return clientRepository.findById(clientId).orElseThrow(() -> new IllegalStateException("Client with id '" + clientId + "' doesn't exists!"));
+    }
+
     public void createClient(Client client) {
         clientRepository.save(client);
     }

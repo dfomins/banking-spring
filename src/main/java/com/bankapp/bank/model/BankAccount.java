@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 @Table
 public class BankAccount {
     @Id
+    @Column(nullable = false, unique = true)
     private final String accountNumber;
     private double balance;
 
@@ -16,11 +17,6 @@ public class BankAccount {
 
     public BankAccount() {
         this.accountNumber = GeneratorUtils.generateCardNumber();
-    }
-
-    public BankAccount(double balance) {
-        this.accountNumber = GeneratorUtils.generateCardNumber();
-        this.balance = balance;
     }
 
     public String getAccountNumber() {

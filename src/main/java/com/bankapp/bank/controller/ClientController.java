@@ -30,6 +30,11 @@ public class ClientController {
         return clientService.getClients();
     }
 
+    @GetMapping(path = "{clientId}")
+    public Client getClient(@PathVariable("clientId") long clientId) {
+        return clientService.getClient(clientId);
+    }
+
     @PostMapping
     public void createClient(@Valid @RequestBody ClientCreateDTO clientDTO) {
         Client client = clientMapper.toEntity(clientDTO);
