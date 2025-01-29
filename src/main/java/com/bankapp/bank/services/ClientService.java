@@ -1,4 +1,4 @@
-package com.bankapp.bank.service;
+package com.bankapp.bank.services;
 
 import com.bankapp.bank.model.Client;
 import com.bankapp.bank.repository.ClientRepository;

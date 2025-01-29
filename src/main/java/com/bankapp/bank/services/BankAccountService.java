@@ -1,18 +1,17 @@
-package com.bankapp.bank.service;
+package com.bankapp.bank.services;
 
 import com.bankapp.bank.dto.BankAccountCreateDTO;
 import com.bankapp.bank.dto.BankAccountDTO;
+import com.bankapp.bank.dto.BankAccountPublicDTO;
 import com.bankapp.bank.model.BankAccount;
 import com.bankapp.bank.model.Client;
 import com.bankapp.bank.model.OperationType;
 import com.bankapp.bank.repository.BankAccountRepository;
 import com.bankapp.bank.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +31,16 @@ public class BankAccountService {
                 .stream()
                 .map(bankAccount -> new BankAccountDTO(
                         bankAccount.getClientFullName(),
+                        bankAccount.getAccountNumber(),
+                        bankAccount.getBalance()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<BankAccountPublicDTO> getBankAccountsPublic() {
+        return bankAccountRepository.findAll()
+                .stream()
+                .map(bankAccount -> new BankAccountPublicDTO(
                         bankAccount.getAccountNumber(),
                         bankAccount.getBalance()
                 ))

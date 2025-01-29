@@ -3,7 +3,7 @@ package com.bankapp.bank.controller;
 import com.bankapp.bank.dto.ClientCreateDTO;
 import com.bankapp.bank.mapper.ClientMapper;
 import com.bankapp.bank.model.Client;
-import com.bankapp.bank.service.ClientService;
+import com.bankapp.bank.services.ClientService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

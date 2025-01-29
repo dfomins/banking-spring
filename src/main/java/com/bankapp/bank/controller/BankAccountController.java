@@ -2,20 +2,18 @@ package com.bankapp.bank.controller;
 
 import com.bankapp.bank.dto.BankAccountCreateDTO;
 import com.bankapp.bank.dto.BankAccountDTO;
+import com.bankapp.bank.dto.BankAccountPublicDTO;
 import com.bankapp.bank.mapper.BankAccountMapper;
 import com.bankapp.bank.model.BankAccount;
-import com.bankapp.bank.model.Client;
 import com.bankapp.bank.model.OperationType;
-import com.bankapp.bank.repository.ClientRepository;
-import com.bankapp.bank.service.BankAccountService;
+import com.bankapp.bank.services.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "bank_account")
+@RequestMapping(path = "/api/v1/accounts")
 public class BankAccountController {
 
     private final BankAccountService bankAccountService;
@@ -32,6 +30,11 @@ public class BankAccountController {
     @GetMapping
     public List<BankAccountDTO> getBankAccounts() {
         return bankAccountService.getBankAccounts();
+    }
+
+    @GetMapping("/public")
+    public List<BankAccountPublicDTO> getBankAccountsPublic() {
+        return bankAccountService.getBankAccountsPublic();
     }
 
     @GetMapping(path = "{accountNumber}")
