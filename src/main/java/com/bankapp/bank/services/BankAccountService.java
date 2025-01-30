@@ -6,8 +6,10 @@ import com.bankapp.bank.dto.BankAccountPublicDTO;
 import com.bankapp.bank.model.BankAccount;
 import com.bankapp.bank.model.Client;
 import com.bankapp.bank.model.OperationType;
+import com.bankapp.bank.model.Transaction;
 import com.bankapp.bank.repository.BankAccountRepository;
 import com.bankapp.bank.repository.ClientRepository;
+import com.bankapp.bank.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +20,13 @@ import java.util.stream.Collectors;
 public class BankAccountService {
 
     private final BankAccountRepository bankAccountRepository;
+    private final TransactionRepository transferRepository;
     private final ClientRepository clientRepository;
 
     @Autowired
-    public BankAccountService(BankAccountRepository bankAccountRepository, ClientRepository clientRepository) {
+    public BankAccountService(BankAccountRepository bankAccountRepository, TransactionRepository transferRepository, ClientRepository clientRepository) {
         this.bankAccountRepository = bankAccountRepository;
+        this.transferRepository = transferRepository;
         this.clientRepository = clientRepository;
     }
 
@@ -68,6 +72,7 @@ public class BankAccountService {
             throw new IllegalStateException("Amount should be greater than 0");
         }
 
+
         switch (operationType) {
             case DEPOSIT -> {
                 bankAccount.deposit(amount);
@@ -79,24 +84,33 @@ public class BankAccountService {
                 }
                 bankAccount.withdraw(amount);
             }
+
+            default -> throw new IllegalStateException("Error");
         }
 
         bankAccountRepository.save(bankAccount);
+
+        Transaction transaction = new Transaction(operationType.toString(), accountNumber, amount);
+        transferRepository.save(transaction);
     }
 
-    public void transferToBankAccount(String fromAccountNumber, String toAccountNumber, double amount) {
-        bankAccountExists(fromAccountNumber);
-        bankAccountExists(toAccountNumber);
+    public void internalTransfer(String senderAccountNumber, String receiverAccountNumber, double amount) {
+        bankAccountExists(senderAccountNumber);
+        bankAccountExists(receiverAccountNumber);
 
-        BankAccount fromBankAccount = bankAccountRepository.findByAccountNumber(fromAccountNumber);
-        BankAccount toBankAccount = bankAccountRepository.findByAccountNumber(toAccountNumber);
+        BankAccount senderBankAccount = bankAccountRepository.findByAccountNumber(senderAccountNumber);
+        BankAccount receiverBankAccount = bankAccountRepository.findByAccountNumber(receiverAccountNumber);
 
-        fromBankAccount.withdraw(amount);
-        toBankAccount.deposit(amount);
+        senderBankAccount.withdraw(amount);
+        receiverBankAccount.deposit(amount);
 
         bankAccountRepository.saveAll(
-                List.of(fromBankAccount, toBankAccount)
+                List.of(senderBankAccount, receiverBankAccount)
         );
+
+        Transaction transaction = new Transaction((OperationType.TRANSFER).toString(), receiverAccountNumber, amount);
+        transaction.setSenderAccountNumber(senderAccountNumber);
+        transferRepository.save(transaction);
     }
 
     public void deleteBankAccount(String accountNumber)

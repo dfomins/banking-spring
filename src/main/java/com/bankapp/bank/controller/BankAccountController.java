@@ -57,9 +57,9 @@ public class BankAccountController {
         bankAccountService.changeBalance(OperationType.WITHDRAW, accountNumber, amount);
     }
 
-    @PutMapping("/transfer")
-    public void transferToBankAccount(@RequestParam String fromAccountNumber, @RequestParam String toAccountNumber, @RequestParam double amount) {
-        bankAccountService.transferToBankAccount(fromAccountNumber, toAccountNumber, amount);
+    @PutMapping("/transfer/internal")
+    public void transferToBankAccount(@RequestParam String senderAccountNumber, @RequestParam String receiverAccountNumber, @RequestParam double amount) {
+        bankAccountService.internalTransfer(senderAccountNumber, receiverAccountNumber, amount);
     }
 
     @DeleteMapping(path = "{accountNumber}")
